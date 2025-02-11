@@ -24,8 +24,10 @@ export default function SellerForm({ sellerLocale, commonLocale }: LogInFormProp
 
   const [propertyType, setPropertyType] = useState<string>('');
   const [submitError, setSubmitError] = useState<string | undefined>();
+  const [successMessage, setSuccessMessage] = useState<string | undefined>();
   const [inputError, setInputError] = useState<ValidationError>();
-
+  const showSnackBar = successMessage || submitError;
+  const snackBarType = submitError ? 'error' : 'success';
   const inputsNotEmpty = [title, location, price, propertyType].every(
     (input) => input !== undefined && input !== null && String(input).trim() !== ''
   );
@@ -98,7 +100,7 @@ export default function SellerForm({ sellerLocale, commonLocale }: LogInFormProp
     event.preventDefault();
     setTitle('');
     setLocation('');
-    setPropertyType(propertyTypeOptions[0]);
+    setPropertyType('');
     setPrice('');
   };
 
@@ -116,6 +118,7 @@ export default function SellerForm({ sellerLocale, commonLocale }: LogInFormProp
         propertyType: formDataObject.propertyType as PropertyType
       };
       await PropertiesService.createProperties(request);
+      setSuccessMessage(sellerLocale['request.submit.success.generic']);
       resetForm(event);
       setIsLoading(false);
     } catch (err) {
@@ -206,9 +209,9 @@ export default function SellerForm({ sellerLocale, commonLocale }: LogInFormProp
       >
         {buttonLabel}
       </button>
-      {submitError && (
+      {showSnackBar && (
         <div id="submit-error">
-          <Snackbar message={submitError} />
+          <Snackbar message={submitError || successMessage || ''} type={snackBarType} />
         </div>
       )}
     </form>

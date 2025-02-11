@@ -15,6 +15,7 @@
     "dropdown.type.label": "Select Property Type",
     "dropdown.type.placeholder": "Select your type",
     "request.submit.error.generic": "Something went wrong. Please try again later.",
+    "request.submit.success.generic": "Property listed!",
     "validation.number-only": "Must only include numeric characters",
     "validation.no-white-space": "Invalid Input",
     "house": "House",

@@ -75,7 +75,7 @@ export default function BuyerLayout({ buyerLocale, commonLocale }: buyerLayoutPr
       )}
       {requestErrorMessage && (
         <div id="request-error">
-          <Snackbar message={requestErrorMessage} />
+          <Snackbar message={requestErrorMessage} type="error" />
         </div>
       )}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full p-4">

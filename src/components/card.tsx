@@ -1,4 +1,4 @@
-import { PropertyType } from '../app/types/seller-types';
+import { PropertyType } from '../app/types';
 import { getPropertyType } from '../app/seller/utils/get-property-type';
 import getImgUrl from '../app/utils/get-img-url';
 

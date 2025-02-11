@@ -30,10 +30,6 @@ export default function BuyerForm({
   const [submitError, setSubmitError] = useState<string | undefined>();
   const [inputError, setInputError] = useState<ValidationError>();
 
-  const inputsNotEmpty = [location, price, propertyType].every(
-    (input) => input !== undefined && input !== null && String(input).trim() !== ''
-  );
-
   const maySubmit = !isLoading && !inputError;
 
   const buttonLabel = isLoading ? commonLocale.loading : commonLocale.submit;
@@ -195,7 +191,7 @@ export default function BuyerForm({
       </div>
       {submitError && (
         <div id="submit-error">
-          <Snackbar message={submitError} />
+          <Snackbar message={submitError} type="error" />
         </div>
       )}
     </form>

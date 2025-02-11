@@ -1,4 +1,4 @@
-import { PropertyType } from '../types/seller-types';
+import { PropertyType } from '../types';
 
 // Hardcoding img urls for displaying in the page for now
 export default function getImgUrl(type: PropertyType): string | undefined {
