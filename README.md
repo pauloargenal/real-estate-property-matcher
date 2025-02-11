@@ -24,6 +24,8 @@
 
 1. Clone this repo
 2. `npm install` to install dependencies
+3. Go to `/seller` route to add listings
+4. Go to `/buyer` route to view and filters listings
 
 ### Develop
 
