@@ -1,0 +1,38 @@
+{
+  "common": {
+    "submit": "Submit",
+    "loading": "Loading",
+    "reset": "Reset"
+  },
+  "seller": {
+    "title": "Property Listing Page",
+    "input.title.label": "Title",
+    "input.title.placeholder": "Enter your title",
+    "input.location.label": "Location",
+    "input.location.placeholder": "Enter your location",
+    "input.price.label": "Price",
+    "input.price.placeholder": "Enter your price",
+    "dropdown.type.label": "Select Property Type",
+    "dropdown.type.placeholder": "Select your type",
+    "request.submit.error.generic": "Something went wrong. Please try again later.",
+    "validation.number-only": "Must only include numeric characters",
+    "validation.no-white-space": "Invalid Input",
+    "house": "House",
+    "apartment": "Apartment",
+    "condo": "Condo"
+  },
+  "buyer": {
+    "title": "Buyer Listing Page",
+    "location": "Location",
+    "type": "Type",
+    "request.error.generic": "Unknown error occurred",
+    "response.empty": "Results not found",
+    "input.title.placeholder": "Enter your title",
+    "input.location.label": "Location",
+    "input.location.placeholder": "Enter your location",
+    "input.price.label": "Price",
+    "input.price.placeholder": "Enter your price",
+    "dropdown.type.label": "Select Property Type",
+    "dropdown.type.placeholder": "Select your type"
+  }
+}

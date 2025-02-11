@@ -1,0 +1,45 @@
+{
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "ignorePatterns": ["node_modules"],
+  "extends": [
+    "plugin:@next/next/recommended",
+    "plugin:@shopify/typescript",
+    "plugin:@shopify/react",
+    "prettier"
+  ],
+  "rules": {
+    "@babel/object-curly-spacing": ["error", "always"],
+    "@typescript-eslint/object-curly-spacing": ["error", "always"],
+    "@typescript-eslint/consistent-indexed-object-style": ["error", "record"],
+    "@typescript-eslint/naming-convention": ["off"],
+    "@shopify/binary-assignment-parens": ["off"],
+    "no-process-env": ["off"],
+    "react/react-in-jsx-scope": ["off"],
+    "@shopify/strict-component-boundaries": ["off"],
+    "jsx-a11y/no-interactive-element-to-noninteractive-role": [
+      "error",
+      {
+        "tr": ["none", "presentation"]
+      }
+    ],
+    "jsx-a11y/control-has-associated-label": [
+      "error",
+      {
+        "ignoreElements": ["tr"]
+      }
+    ],
+    "@next/next/no-img-element": ["off"],
+    "import/extensions": [
+      "error",
+      {
+        "cjs": "always",
+        "mjs": "always",
+        "css": "always"
+      }
+    ],
+    "jsx-a11y/no-autofocus": ["off"]
+  }
+}

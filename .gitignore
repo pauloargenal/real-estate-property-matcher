@@ -1,0 +1,17 @@
+# Dependencies
+node_modules
+
+# Build output
+.next
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# Logs
+npm-debug.log*
+
+# Misc
+.DS_Store
+*.ppk
+*.pem
