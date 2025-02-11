@@ -1,6 +1,6 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 
 import { BuyerFilters, PropertyType, PropertiesResponse, BuyerRequest } from '../../types';
 import BuyerService from '../../../services/buyer-service';
@@ -23,7 +23,8 @@ export default function BuyerLayout({ buyerLocale, commonLocale }: buyerLayoutPr
   const [filters, setFilters] = useState<BuyerFilters>(DEFAULT_FILTERS);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [requestErrorMessage, setRequestErrorMessage] = useState<string>('');
-  const [properties, setProperties] = useState<PropertiesResponse[] | undefined>();
+  const [properties, setProperties] = useState<PropertiesResponse[]>();
+
   const getProperties = useCallback(async () => {
     setIsLoading(true);
     try {
@@ -44,15 +45,31 @@ export default function BuyerLayout({ buyerLocale, commonLocale }: buyerLayoutPr
       setRequestErrorMessage(buyerLocale['request.error.generic']);
     }
     setIsLoading(false);
-  }, [buyerLocale, filters?.location, filters?.price, filters?.propertyType]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [buyerLocale]);
 
-  const handleFilters = (filters: BuyerFilters) => {
+  const handleFilters = useCallback((filters: BuyerFilters) => {
     setFilters(filters);
-  };
+  }, []);
+  const filteredProperties = useMemo(() => {
+    return properties?.filter((property) => {
+      const matchesLocation = filters.location
+        ? property.location.toLowerCase().includes(filters.location.toLowerCase())
+        : true;
+      const matchesPrice = filters.price
+        ? parseFloat(String(property.price)) <= parseFloat(filters.price)
+        : true;
+      const matchesType = filters.propertyType
+        ? property.propertyType === filters.propertyType
+        : true;
+
+      return matchesLocation && matchesPrice && matchesType;
+    });
+  }, [filters, properties]);
 
   useEffect(() => {
     getProperties();
-  }, [getProperties, filters]);
+  }, [getProperties]);
 
   return (
     <>
@@ -68,7 +85,7 @@ export default function BuyerLayout({ buyerLocale, commonLocale }: buyerLayoutPr
         handleFilters={handleFilters}
         isLoading={isLoading}
       />
-      {properties?.length === 0 && (
+      {filteredProperties?.length === 0 && (
         <div className="text-2xl text-center font-medium flex flex-col justify-center h-screen w-auto">
           {buyerLocale['response.empty']}
         </div>
@@ -79,7 +96,7 @@ export default function BuyerLayout({ buyerLocale, commonLocale }: buyerLayoutPr
         </div>
       )}
       <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 w-full p-4">
-        {properties?.map((property) => (
+        {filteredProperties?.map((property) => (
           <Card
             key={`${property.title}`}
             title={property.title}

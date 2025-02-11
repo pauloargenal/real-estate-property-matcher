@@ -3,7 +3,7 @@
 import { useState, FormEvent, ChangeEvent, MouseEvent } from 'react';
 
 import Snackbar from '../../../components/snackbar';
-import { validationSchema, ValidationError, getValidationError } from '../../../utils/validation';
+import { ValidationError } from '../../../utils/validation';
 import { BuyerFilters, PropertyType, SellerSubmitError } from '../../types';
 import Dropdown from '../../../components/dropdown';
 import { getPropertyType } from '../../seller/utils/get-property-type';
@@ -28,11 +28,6 @@ export default function BuyerForm({
 
   const [propertyType, setPropertyType] = useState<string>('');
   const [submitError, setSubmitError] = useState<string | undefined>();
-  const [inputError, setInputError] = useState<ValidationError>();
-
-  const maySubmit = !isLoading && !inputError;
-
-  const buttonLabel = isLoading ? commonLocale.loading : commonLocale.submit;
 
   const inputs = [
     {
@@ -44,11 +39,13 @@ export default function BuyerForm({
       value: location,
       inputErrorType: ValidationError.NoWhitespace,
       onChange: (event: ChangeEvent<HTMLInputElement>) => {
-        const { value } = event.target || {};
+        const { value } = event.target;
         setLocation(value);
-        const result = validationSchema.noWhitespace.safeParse(value);
-        const locationInputError = getValidationError(result, [ValidationError.Empty]);
-        setInputError(locationInputError);
+        handleFilters({
+          location: value,
+          propertyType: propertyType as PropertyType,
+          price
+        });
       },
       inputTestId: 'location-input',
       errorTestid: 'location-error'
@@ -63,13 +60,13 @@ export default function BuyerForm({
       inputErrorType: ValidationError.Number,
       onChange: (event: ChangeEvent<HTMLInputElement>) => {
         const { value } = event.target || {};
-        setPrice(event.target.value);
-        const result = validationSchema.number.safeParse(value);
-        const locationInputError = getValidationError(result, [
-          ValidationError.Number,
-          ValidationError.NoWhitespace
-        ]);
-        setInputError(locationInputError);
+        setPrice(value);
+
+        handleFilters({
+          location,
+          propertyType: propertyType as PropertyType,
+          price: value
+        });
       },
       inputTestId: 'price-input',
       errorTestid: 'price-error'
@@ -88,20 +85,6 @@ export default function BuyerForm({
     });
   };
 
-  async function onSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-    const formData = new FormData(event.target as HTMLFormElement);
-    const formDataObject = Object.fromEntries(formData.entries());
-
-    const filter: BuyerFilters = {
-      location: String(formDataObject.location),
-      price: String(formDataObject.price),
-      propertyType: formDataObject.propertyType as PropertyType
-    };
-
-    handleFilters(filter);
-  }
-
   const handleFocus = () => {
     setSubmitError(undefined);
   };
@@ -112,29 +95,19 @@ export default function BuyerForm({
   }));
 
   return (
-    <form className="flex justify-between items-center  gap-4 p-4  w-full " onSubmit={onSubmit}>
+    <form className="flex justify-between items-center  gap-4 p-4  w-full ">
       <div className="flex justify-start items-center gap-4">
         {inputs.map((input) => {
           const {
             id,
             type,
-            submitErrorType,
+
             label,
             placeholder,
             value,
             onChange,
-            inputErrorType,
-            inputTestId,
-            errorTestid
+            inputTestId
           } = input;
-          let inputClassName = 'p-4 w-full rounded-md';
-
-          const hasInputError = inputError && inputError === inputErrorType;
-          const hasSubmitError = submitError && submitError === submitErrorType;
-          const hasError = hasInputError || hasSubmitError;
-          if (hasError) {
-            inputClassName = `${inputClassName} bg-cienna-10`;
-          }
 
           return (
             <label key={id} htmlFor={id} className="flex flex-col ">
@@ -146,18 +119,13 @@ export default function BuyerForm({
                   type={type}
                   autoComplete="off"
                   placeholder={placeholder}
-                  className={inputClassName}
+                  className="p-4 w-full rounded-md"
                   disabled={isLoading}
                   value={value}
                   onChange={onChange}
                   data-testid={inputTestId}
                 />
               </div>
-              {hasInputError && (
-                <span className="font-medium text-sm text-cienna-100 mt-1" id={errorTestid}>
-                  {sellerLocale[`validation.${inputError}`]}
-                </span>
-              )}
             </label>
           );
         })}
@@ -171,16 +139,16 @@ export default function BuyerForm({
           ariaLabel={sellerLocale['dropdown.type.label']}
           placeholder={sellerLocale['dropdown.type.placeholder']}
           searchable
+          onChange={(value) => {
+            handleFilters({
+              location,
+              propertyType: value as PropertyType,
+              price
+            });
+          }}
         />
       </div>
       <div className="flex gap-4">
-        <button
-          type="submit"
-          disabled={!maySubmit}
-          className=" text-white bg-blue-100  w-[200px] h-[56px]  mt-8 rounded-md"
-        >
-          {buttonLabel}
-        </button>
         <button
           type="reset"
           onClick={(event) => handleReset(event)}

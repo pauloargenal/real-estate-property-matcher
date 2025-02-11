@@ -12,6 +12,7 @@ interface DropdownProps {
   disabled?: boolean;
   searchable?: boolean;
   containerClassName?: string;
+  onChange?: (value: string) => void;
 }
 
 export default function Dropdown(props: DropdownProps) {
@@ -24,7 +25,8 @@ export default function Dropdown(props: DropdownProps) {
     setValue,
     disabled = false,
     searchable = false,
-    containerClassName = ''
+    containerClassName = '',
+    onChange
   } = props;
 
   const [optionsVisible, setOptionsVisible] = useState<boolean>(false);
@@ -48,6 +50,9 @@ export default function Dropdown(props: DropdownProps) {
 
     setValue(targetWithDropdownValue?.dataset.dropdownValue || '');
     setOptionsVisible(false);
+    if (typeof onChange === 'function') {
+      onChange(targetWithDropdownValue?.dataset.dropdownValue || '');
+    }
   }
 
   let readOnly = false;

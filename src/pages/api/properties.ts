@@ -3,8 +3,6 @@ import path from 'path';
 
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-import { PropertiesResponse, PropertyType } from '../../app/types';
-
 const filePath = path.resolve(process.cwd(), 'data/properties.json');
 
 function handleGet(req: NextApiRequest, res: NextApiResponse) {
@@ -15,24 +13,8 @@ function handleGet(req: NextApiRequest, res: NextApiResponse) {
       }
 
       const fileData = fs.readFileSync(filePath, 'utf-8');
-      const { location, price, propertyType } = req.query;
       const properties = JSON.parse(fileData);
-
-      const filterByPropertyType = properties.filter((property: PropertiesResponse) =>
-        propertyType ? property.propertyType.includes(propertyType as PropertyType) : true
-      );
-
-      const filterByLocation = filterByPropertyType.filter((property: PropertiesResponse) =>
-        location ? property.location.toLowerCase().includes(String(location).toLowerCase()) : true
-      );
-
-      const filterByPrice = filterByLocation.filter((property: PropertiesResponse) => {
-        if (!price) return true;
-        const userPrice = parseFloat(price as string);
-        return property.price <= userPrice;
-      });
-
-      res.status(200).json(filterByPrice);
+      res.status(200).json(properties);
     } catch (error) {
       res.status(500).json({ error: 'Failed to read data.' });
     }
