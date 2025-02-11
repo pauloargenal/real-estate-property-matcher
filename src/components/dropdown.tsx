@@ -1,6 +1,7 @@
 'use client';
 
 import { Dispatch, SetStateAction, useState, useEffect } from 'react';
+import { FaChevronDown } from 'react-icons/fa';
 
 interface DropdownProps {
   id: string;
@@ -104,6 +105,7 @@ export default function Dropdown(props: DropdownProps) {
           }}
         />
       </label>
+      <FaChevronDown size={16} className="absolute bottom-5 -mt-0.5 right-4 text-black-70" />
       {optionsVisible && (
         <div
           className="absolute left-0 right-0 top-full z-10 flex flex-col pt-1"

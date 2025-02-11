@@ -36,7 +36,7 @@
       "error",
       {
         "cjs": "always",
-        "mjs": "always",
+        "mjs": "ignorePackages",
         "css": "always"
       }
     ],

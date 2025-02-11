@@ -1,3 +1,5 @@
+import { FaMapMarkerAlt } from 'react-icons/fa';
+
 import { PropertyType } from '../app/types';
 import { getPropertyType } from '../app/seller/utils/get-property-type';
 import getImgUrl from '../app/utils/get-img-url';
@@ -11,7 +13,6 @@ interface CardProps {
 }
 
 export default function Card({ title, price, location, type, buyerLocale }: CardProps) {
-  const locationText = `${buyerLocale.location}: ${location}`;
   const propertyType = getPropertyType(type);
   const typeText = `${buyerLocale.type}: ${propertyType}`;
   const imgUrl = getImgUrl(type);
@@ -27,7 +28,10 @@ export default function Card({ title, price, location, type, buyerLocale }: Card
         <h5 className="font-medium text-2xl">{title}</h5>
         <span className="text-2xl font-bold">{priceText}</span>
         <div className="flex items-center justify-between">
-          <span className="text-sm text-gray-300">{locationText}</span>
+          <div className=" flex items-center gap-2">
+            <FaMapMarkerAlt className=" text-black-70" size={16} />
+            <span className="text-sm text-gray-300">{location}</span>
+          </div>
           <span className="text-sm text-gray-300">{typeText}</span>
         </div>
       </div>
