@@ -51,20 +51,25 @@ export default function BuyerLayout({ buyerLocale, commonLocale }: buyerLayoutPr
   const handleFilters = useCallback((filters: BuyerFilters) => {
     setFilters(filters);
   }, []);
-  const filteredProperties = useMemo(() => {
-    return properties?.filter((property) => {
-      const matchesLocation = filters.location
-        ? property.location.toLowerCase().includes(filters.location.toLowerCase())
-        : true;
-      const matchesPrice = filters.price
-        ? parseFloat(String(property.price)) <= parseFloat(filters.price)
-        : true;
-      const matchesType = filters.propertyType
-        ? property.propertyType === filters.propertyType
-        : true;
 
-      return matchesLocation && matchesPrice && matchesType;
-    });
+  const filteredProperties = useMemo(() => {
+    return properties
+      ?.filter((property) => {
+        const matchesLocation = filters.location
+          ? property.location.toLowerCase().includes(filters.location.toLowerCase())
+          : true;
+        const matchesPrice = filters.price
+          ? parseFloat(String(property.price)) <= parseFloat(filters.price)
+          : true;
+        const matchesType = filters.propertyType
+          ? property.propertyType === filters.propertyType
+          : true;
+
+        return matchesLocation && matchesPrice && matchesType;
+      })
+      .sort(
+        (priceA, priceB) => parseFloat(String(priceA.price)) - parseFloat(String(priceB.price))
+      );
   }, [filters, properties]);
 
   useEffect(() => {
